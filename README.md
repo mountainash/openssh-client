@@ -1,16 +1,39 @@
 # openssh-client
 
-A handy Docker Image for connecting through SSH to remote hosts.
+A handy Docker Image for connecting through SSH to remote hosts with _optional_ support for SSH host keys.
 
-## Gitlab CI/CD Example
+## Setup 
+### Environment Variables
+
+These variables are set in GitLab CI/CD settings
+- `SSH_HOST` (remote's hostname)
+- `SSH_KNOWN_HOSTS` (host's key signature, can be set to `NoStrictHostKeyChecking` to not check)
+- `SSH_USER_NAME` (ssh username for access to the host)
+- `SSH_PRIVATE_KEY` (ssh private key for SSH_USER_NAME)
+
+### Generating SSH_PRIVATE_KEY
+
+Need some new keys? You can use this image to generate them (no messing up your local machine with keys - and adding to your "vector").
+
+```sh
+docker run --rm --entrypoint keygen.sh registry.gitlab.com/containeryard/openssh:latest
+```
+
+Four different types (dsa, ecdsa, ed25519, or rsa) public and private authentication keys will be printed to stdout. Pick your perferred key type and copy & paste into your CD/CI settings.
+
+### Getting SSH_KNOWN_HOSTS
+
+SSH to the server and run `ssh-keyscan` on the full domain name of the `SSH_HOST`:
+
+```sh
+ssh-keyscan hostname.com
+```
+
+### Gitlab CI/CD Example
+
+Create a `.gitlab-ci.yml` file in the root of your project to trigger SSH commands on a remote server on commit to the `master` branch.
 
 ```yml
-# These variables are set in GitLab CI/CD variables
-# - SSH_HOST (remote's hostname)
-# - SSH_KNOWN_HOSTS (host's key signature)
-# - SSH_USER_NAME (ssh username for access to the host)
-# - SSH_PRIVATE_KEY (ssh key for SSH_USER_NAME)
-
 deploy:
   image: registry.gitlab.com/containeryard/openssh
   only:
@@ -26,7 +49,7 @@ deploy:
   allow_failure: false
 ```
 
-## Docker Compose Example
+### Docker Compose Example
 
 ```yml
 version: '3'
@@ -41,20 +64,10 @@ services:
         -----BEGIN RSA PRIVATE KEY-----
           ...
         -----END RSA PRIVATE KEY-----
-      SSH_KNOWN_HOSTS: hostname.com ssh-ed25519 AAAAC3Nz...Ygns # can be set to `NoStrictHostKeyChecking`
-    command: ls
-```
-
-Most of these will be set in the CI Environment if running on Gitlab.
-
-## Getting SSH_KNOWN_HOSTS
-
-SSH to the server and run `ssh-keyscan` on the full domain name of the `SSH_HOST`:
-
-```sh
-ssh-keyscan tigh.asoshared.com
+      SSH_KNOWN_HOSTS: hostname.com ssh-ed25519 AAAAC3Nz...Ygns
+    command: sh
 ```
 
 ## Credits
 
-Based on https://github.com/chuckyblack/docker-openssh-client / https://hub.docker.com/r/jaromirpufler/docker-openssh-client
+Based on https://github.com/chuckyblack/docker-openssh-client / https://hub.docker.com/r/jaromirpufler/docker-openssh-client but added host keys support
