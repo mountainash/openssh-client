@@ -1,0 +1,8 @@
+# Environment
+.env*
+
+# Operating System
+.DS_Store
+
+# IDEs
+.vscode
