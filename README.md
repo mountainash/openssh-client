@@ -1,11 +1,13 @@
-# openssh-client
+# OpenSSH Client
 
-A handy Docker Image for connecting through SSH to remote hosts with _optional_ support for SSH host keys.
+> A handy Docker Image for connecting through SSH to remote hosts with _optional_ support for SSH host keys.
 
-## Setup 
+![Pufferfish](avatar.png)
+
+## Setup
 ### Environment Variables
 
-These variables are set in GitLab CI/CD settings
+These variables are set in GitLab CI/CD settings (but could be any CI/CD pipeline service):
 - `SSH_HOST` (remote's hostname)
 - `SSH_KNOWN_HOSTS` (host's key signature, can be set to `NoStrictHostKeyChecking` to not check)
 - `SSH_USER_NAME` (ssh username for access to the host)
@@ -16,7 +18,7 @@ These variables are set in GitLab CI/CD settings
 Need some new keys? You can use this image to generate them (no messing up your local machine with keys - and adding to your "vector").
 
 ```sh
-docker run --rm --entrypoint keygen.sh registry.gitlab.com/containeryard/openssh:latest
+docker run --rm --entrypoint keygen.sh mountainash/openssh-client:latest
 ```
 
 Four different types (dsa, ecdsa, ed25519, or rsa) public and private authentication keys will be printed to stdout. Pick your perferred key type and copy & paste into your CD/CI settings.
@@ -29,13 +31,13 @@ SSH to the server and run `ssh-keyscan` on the full domain name of the `SSH_HOST
 ssh-keyscan hostname.com
 ```
 
-### Gitlab CI/CD Example
+### GitLab CI/CD Example
 
 Create a `.gitlab-ci.yml` file in the root of your project to trigger SSH commands on a remote server on commit to the `master` branch.
 
 ```yml
 deploy:
-  image: registry.gitlab.com/containeryard/openssh
+  image: mountainash/openssh-client:latest
   only:
     - master
   environment:
@@ -49,25 +51,14 @@ deploy:
   allow_failure: false
 ```
 
-### Docker Compose Example
+`image` can also be pulled from `registry.gitlab.com/containeryard/openssh`
 
-```yml
-version: '3'
+## Contribute
 
-services:
-  openssh:
-    image: registry.gitlab.com/containeryard/openssh
-    environment:
-      SSH_HOST: hostname.com
-      SSH_USER_NAME: gitlab-cicd
-      SSH_PRIVATE_KEY: |-
-        -----BEGIN RSA PRIVATE KEY-----
-          ...
-        -----END RSA PRIVATE KEY-----
-      SSH_KNOWN_HOSTS: hostname.com ssh-ed25519 AAAAC3Nz...Ygns
-    command: sh
-```
+- GitLab: https://gitlab.com/containeryard/openssh/container_registry
 
 ## Credits
 
 Based on https://github.com/chuckyblack/docker-openssh-client / https://hub.docker.com/r/jaromirpufler/docker-openssh-client but added host keys support
+
+Pufferfish by [Catalina Montes from the Noun Project](https://thenounproject.com/term/pufferfish/181192/)
