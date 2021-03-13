@@ -1,11 +1,9 @@
 #!/bin/sh
 
-set -o errexit
 set -o pipefail
-set -o nounset
 
 
-if [ ! -z "$SSH_PRIVATE_KEY" ]; then
+if [ "$SSH_PRIVATE_KEY" ]; then
     ## Run ssh-agent (inside the build environment)
     eval $(ssh-agent -s)
 
@@ -13,7 +11,7 @@ if [ ! -z "$SSH_PRIVATE_KEY" ]; then
     echo "${SSH_PRIVATE_KEY}" | ssh-add -
 fi
 
-if [ ! -z "$SSH_KNOWN_HOSTS" ]; then
+if [ "$SSH_KNOWN_HOSTS" ]; then
     echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     chmod 644 ~/.ssh/known_hosts
 fi

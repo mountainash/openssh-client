@@ -5,4 +5,6 @@ RUN apk add --no-cache openssh-client rsync && \
 
 COPY *.sh ./
 
+RUN chmod +x *.sh
+
 ENTRYPOINT ["./entrypoint.sh"]
