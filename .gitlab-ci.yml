@@ -15,3 +15,7 @@ build:
 
 include:
   - template: Security/Container-Scanning.gitlab-ci.yml
+
+container_scanning:
+  variables:
+    GIT_STRATEGY: fetch
