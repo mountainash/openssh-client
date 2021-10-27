@@ -19,3 +19,5 @@ include:
 container_scanning:
   variables:
     GIT_STRATEGY: fetch
+    CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
+    CI_APPLICATION_TAG: latest
