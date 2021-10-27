@@ -62,6 +62,7 @@ deploy:
 ## Contribute
 
 - GitLab: https://gitlab.com/containeryard/openssh
+- Github (mirror): https://github.com/mountainash/openssh-client
 
 ## Credits
 

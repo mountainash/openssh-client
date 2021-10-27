@@ -1,3 +1,8 @@
+# v1.1.1
+## Features
+- Added a push mirror from GitLab to Github
+- Added Gitlab (Trivy) Container Scanning CI stage
+
 # v1.1.0
 ## Features
 - Added Changelog
