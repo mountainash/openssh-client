@@ -1,3 +1,7 @@
+# v1.1.2
+## Features
+- Added Github Actions to build and push the image to Docker Hub (as it's [a bit of a mess to do 2 pushes in a Gitlab CI](https://gitlab.com/gitlab-org/gitlab/-/issues/277167))
+
 # v1.1.1
 ## Features
 - Added a push mirror from GitLab to Github
