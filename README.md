@@ -22,7 +22,7 @@ These variables are set in GitLab CI/CD settings (but could be any CI/CD pipelin
 Need some new keys? You can use this image to generate them (no polluting up your local machine with keys - and adding to your "vector").
 
 ```sh
-docker run --rm --entrypoint keygen.sh mountainash/openssh-client:latest
+docker run --rm mountainash/openssh-client:latest ./keygen.sh
 ```
 
 Four different types (dsa, ecdsa, ed25519, or rsa) public and private authentication keys will be printed to stdout. Pick your perferred key type and copy & paste into your CD/CI settings and remote server.
@@ -53,7 +53,7 @@ deploy:
     GIT_STRATEGY: none
     GIT_SUBMODULE_STRATEGY: none
   script:
-    - ssh $SSH_USER_NAME@$SSH_HOST "cd /www && git pull origin master && exit"
+    - ssh $SSH_USER_NAME@$SSH_HOST "cd /www && git pull $CI_REPOSITORY_URL && exit"
   allow_failure: false
 ```
 
