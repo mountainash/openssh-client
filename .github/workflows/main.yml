@@ -21,7 +21,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@47c365107cb34e788d99cf3d89acf424b505b3e8
+        uses: docker/metadata-action@232fc64e3a4e54539e087c5976439ea54be0959d
         with:
           images: mountainash/openssh-client
 
