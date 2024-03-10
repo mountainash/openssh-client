@@ -1,6 +1,10 @@
-# vx.x.x
+# v1.1.3
+## Features
+- Added GitHub Actions example to README
 ## Fixes
-- Keygen command fix in docs
+- setting USER so `~` substitution works as expected
+- Pulled latest `alpine` base image
+- "GitHub" branding from "Github"
 
 # v1.1.2
 ## Features

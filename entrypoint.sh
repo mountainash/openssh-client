@@ -12,11 +12,13 @@ if [ "$SSH_PRIVATE_KEY" ]; then
 fi
 
 if [ "$SSH_KNOWN_HOSTS" ]; then
+    touch ~/.ssh/known_hosts
     echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     chmod 644 ~/.ssh/known_hosts
 fi
 
 if [ "$SSH_KNOWN_HOSTS" == "NoStrictHostKeyChecking" ]; then
+    touch ~/.ssh/config
     echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config
 fi
 

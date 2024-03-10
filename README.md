@@ -13,7 +13,7 @@ Can be used in a deployment pipeline to connect to a remote host, and run a git,
 
 These variables are set in GitLab CI/CD settings (but could be any CI/CD pipeline service eg. GitHub Actions, CircleCI, Jenkins, etc.):
 - `SSH_HOST` (remote's hostname)
-- `SSH_KNOWN_HOSTS` (host's key signature eg. `[172.31.98.99]:22222 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE21QbMGqxh/pXh0/mn9K9hnplyRGA3MJfe/wBoCVIaX`, can be set to `NoStrictHostKeyChecking` to not check)
+- `SSH_KNOWN_HOSTS` (host's key signature eg. `[172.31.98.99]:22222 ssh-ed25519 AAAAC3NzaC1lZDI1NTE...n9K9hnplyRGA3MJfe/wBoCVIaX`, can be set to `NoStrictHostKeyChecking` to not check)
 - `SSH_USER_NAME` (ssh username for access to the host)
 - `SSH_PRIVATE_KEY` (ssh private key for SSH_USER_NAME)
 
@@ -43,6 +43,7 @@ Create a `.gitlab-ci.yml` file in the root of your project to trigger SSH comman
 
 ```yml
 deploy:
+  ## Replace latest with a SHA for better security
   image: mountainash/openssh-client:latest
   only:
     - master
@@ -58,6 +59,38 @@ deploy:
 ```
 
 `image` can also be pulled from `registry.gitlab.com/containeryard/openssh`
+
+### GitHub Actions Workflow Example
+
+In `./github/workflows/ssh-deploy.yml` (or similar).
+
+```yml
+name: Deploy to Remote Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Remote Server
+    runs-on: ubuntu-latest
+    container:
+      image: registry.gitlab.com/containeryard/openssh
+      env:
+        SSH_HOST: ${{ vars.SSH_HOST }}
+        SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
+        SSH_USER_NAME: ${{ vars.SSH_USER_NAME }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      volumes:
+          - ./:/app/
+    steps:
+      - name: Copy HTML to Remote Server
+        run: scp /app/sample.html $SSH_USER_NAME@$SSH_HOST:/home/mountainash/www/sitename/index.html
+```
+
+`image` can also be pulled from `mountainash/openssh-client:latest` (Docker Hub).
 
 ## Contribute
 
