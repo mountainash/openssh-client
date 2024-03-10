@@ -61,10 +61,10 @@ deploy:
 
 ## Contribute
 
-- GitLab: https://gitlab.com/containeryard/openssh
-- Github (mirror): https://github.com/mountainash/openssh-client
+- GitLab: <https://gitlab.com/containeryard/openssh>
+- GitHub (mirror): <https://github.com/mountainash/openssh-client>
 
 ## Credits
 
-- Based on https://github.com/chuckyblack/docker-openssh-client / https://hub.docker.com/r/jaromirpufler/docker-openssh-client but added host keys support
+- Based on <https://github.com/chuckyblack/docker-openssh-client> / <https://hub.docker.com/r/jaromirpufler/docker-openssh-client> but added host keys support
 - Pufferfish by [Catalina Montes from the Noun Project](https://thenounproject.com/term/pufferfish/181192/)
