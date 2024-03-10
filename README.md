@@ -11,9 +11,9 @@ Can be used in a deployment pipeline to connect to a remote host, and run a git,
 ## Setup
 ### Environment Variables
 
-These variables are set in GitLab CI/CD settings (but could be any CI/CD pipeline service [eg. Github Actions, Jenkins, etc.]):
+These variables are set in GitLab CI/CD settings (but could be any CI/CD pipeline service eg. GitHub Actions, CircleCI, Jenkins, etc.):
 - `SSH_HOST` (remote's hostname)
-- `SSH_KNOWN_HOSTS` (host's key signature, can be set to `NoStrictHostKeyChecking` to not check)
+- `SSH_KNOWN_HOSTS` (host's key signature eg. `[172.31.98.99]:22222 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE21QbMGqxh/pXh0/mn9K9hnplyRGA3MJfe/wBoCVIaX`, can be set to `NoStrictHostKeyChecking` to not check)
 - `SSH_USER_NAME` (ssh username for access to the host)
 - `SSH_PRIVATE_KEY` (ssh private key for SSH_USER_NAME)
 
