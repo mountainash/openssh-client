@@ -1,3 +1,7 @@
+# vx.x.x
+## Fixes
+- Updated GitHub Actions action dependencies
+
 # v1.1.3
 ## Features
 - Added GitHub Actions example to README
