@@ -1,5 +1,6 @@
 .git*
 *.md
 *.yml
+*.json
 avatar.png
 .DS_Store
