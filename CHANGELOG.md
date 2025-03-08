@@ -1,6 +1,8 @@
-# vx.x.x
-## Fixes
+# v1.1.4
+## Features
 - Updated GitHub Actions action dependencies
+## Fixes
+- Logic change to allow `SSH_KNOWN_HOSTS="NoStrictHostKeyChecking"` logic to run
 
 # v1.1.3
 ## Features
