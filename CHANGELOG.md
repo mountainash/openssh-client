@@ -1,3 +1,8 @@
+# v1.1.5
+## Features
+- Info outputs added to help with debugging workflows (are they adding the key/values correctly?)
+- README instructions are less GitLab centric
+
 # v1.1.4
 ## Features
 - Updated GitHub Actions action dependencies

@@ -6,18 +6,20 @@
 
 ![Pufferfish](https://gitlab.com/containeryard/openssh/-/raw/14afda69422ca6c4dc91e49cf79de24f0a65b226/avatar.png)
 
-Can be used in a deployment pipeline to connect to a remote host, and run a git, a Docker `pull` or any CLI command.
+Can be used in a deployment pipeline to connect to a remote host, and run a git, a Docker `pull` or any CLI command. It's very small and lightweight, based on Alpine Linux.
 
 ## Setup
+
+Image available on [Docker Hub](https://hub.docker.com/r/mountainash/openssh-client) or [GitLab Container Registry](https://gitlab.com/containeryard/openssh/container_registry/1422252).
+
 ### Environment Variables
 
-These variables are set in GitLab CI/CD settings (but could be any CI/CD pipeline service eg. GitHub Actions, CircleCI, Jenkins, etc.):
+These variables are set in the CI/CD settings (these could be any CI/CD pipeline service eg. GitHub Actions, GitLab CI/CD, CircleCI, Jenkins, etc.):
 - `SSH_HOST` (remote's hostname)
 - `SSH_KNOWN_HOSTS` (host's key signature eg. `[172.31.98.99]:22222 ssh-ed25519 AAAAC3NzaC1lZDI1NTE...n9K9hnplyRGA3MJfe/wBoCVIaX`, can be set to `NoStrictHostKeyChecking` to not check)
-- `SSH_USER_NAME` (ssh username for access to the host)
-- `SSH_PRIVATE_KEY` (ssh private key for SSH_USER_NAME)
+- `SSH_PRIVATE_KEY` (SSH private key added to the agent store)
 
-### Generating SSH_PRIVATE_KEY
+### Tool: Generating SSH_PRIVATE_KEY
 
 Need some new keys? You can use this image to generate them (no polluting up your local machine with keys - and adding to your "vector").
 
@@ -27,7 +29,7 @@ docker run --rm mountainash/openssh-client:latest ./keygen.sh
 
 Four different types (dsa, ecdsa, ed25519, or rsa) public and private authentication keys will be printed to stdout. Pick your perferred key type and copy & paste into your CD/CI settings and remote server.
 
-### Getting SSH_KNOWN_HOSTS
+### Tip: Getting SSH_KNOWN_HOSTS
 
 SSH to the server and run `ssh-keyscan` on the full domain name of the `SSH_HOST`:
 
@@ -37,14 +39,14 @@ ssh-keyscan hostname.com
 
 You can also do it locally, but doing it on the server it's self prevents any man-in-the-middle shenanigans.
 
-### GitLab CI/CD Example
+### Example: GitLab CI/CD Pipeline
 
-Create a `.gitlab-ci.yml` file in the root of your project to trigger SSH commands on a remote server on commit to the `master` branch.
+Create a `.gitlab-ci.yml` file in the root of your project to trigger SSH commands on a remote server and commit to the `master` branch (pre-cloning on the server would already be needed).
 
 ```yml
 deploy:
-  ## Replace latest with a SHA for better security
-  image: mountainash/openssh-client:latest
+  ## Suffix with latest with a SHA for better security
+  image: registry.gitlab.com/containeryard/openssh
   only:
     - master
   environment:
@@ -58,11 +60,9 @@ deploy:
   allow_failure: false
 ```
 
-`image` can also be pulled from `registry.gitlab.com/containeryard/openssh`
+### Example: GitHub Actions Workflow
 
-### GitHub Actions Workflow Example
-
-In `./github/workflows/ssh-deploy.yml` (or similar).
+In `./github/workflows/ssh-deploy.yml` (or similar). This will copy a file to a remote server on a push to the `main` branch.
 
 ```yml
 name: Deploy to Remote Server
@@ -77,7 +77,7 @@ jobs:
     name: Deploy to Remote Server
     runs-on: ubuntu-latest
     container:
-      image: registry.gitlab.com/containeryard/openssh
+      image: mountainash/openssh-client:latest
       env:
         SSH_HOST: ${{ vars.SSH_HOST }}
         SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
@@ -90,8 +90,6 @@ jobs:
         run: scp /app/sample.html $SSH_USER_NAME@$SSH_HOST:/home/mountainash/www/sitename/index.html
 ```
 
-`image` can also be pulled from `mountainash/openssh-client:latest` (Docker Hub).
-
 ## Contribute
 
 - GitLab: <https://gitlab.com/containeryard/openssh>
@@ -99,5 +97,5 @@ jobs:
 
 ## Credits
 
-- Based on <https://github.com/chuckyblack/docker-openssh-client> / <https://hub.docker.com/r/jaromirpufler/docker-openssh-client> but added host keys support
+- Based on <https://github.com/chuckyblack/docker-openssh-client> / <https://hub.docker.com/r/jaromirpufler/docker-openssh-client> but added host keys support & keygen script
 - Pufferfish by [Catalina Montes from the Noun Project](https://thenounproject.com/term/pufferfish/181192/)
